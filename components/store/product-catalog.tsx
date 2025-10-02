@@ -186,38 +186,62 @@ export function ProductCatalog() {
     return Math.round(((original - current) / original) * 100);
   };
 
-  const ProductCard = ({product}: {product: any}) => (
-    <a href={`/store/${product.id}`} className="relative flex flex-col gap-2 p-2 shadow-sm hover:shadow-md transition-shadow">
-      <div className="relative">
-        <img
-          src={product.image || "/placeholder.svg"}
-          alt={product.name}
-          className="w-full h-48 object-cover"
-        />
-        <div
-          role="button"
-          tabIndex={0}
-          className="absolute bottom-2 right-2 bg-white rounded-full p-2 shadow-md hover:bg-gray-100 cursor-pointer"
-          onClick={(e) => {
-            e.preventDefault();
-            // Add to cart logic here if needed
-          }}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
+  const ProductCard = ({product}: {product: any}) => {
+    const fullStars = Math.floor(product.rating || 0);
+    const halfStar = (product.rating || 0) - fullStars >= 0.5;
+    const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
+
+    return (
+      <a href={`/store/${product.id}`} className="relative flex flex-col gap-2 p-2 shadow-sm hover:shadow-md transition-shadow">
+        <div className="relative">
+          <img
+            src={product.image || "/placeholder.svg"}
+            alt={product.name}
+            className="w-full h-48 object-cover"
+          />
+          <div
+            role="button"
+            tabIndex={0}
+            className="absolute bottom-2 right-2 bg-white rounded-full p-2 shadow-md hover:bg-gray-100 cursor-pointer"
+            onClick={(e) => {
               e.preventDefault();
               // Add to cart logic here if needed
-            }
-          }}
-        >
-          <ShoppingCartIcon className="h-5 w-5 text-black" />
+            }}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                // Add to cart logic here if needed
+              }
+            }}
+          >
+            <ShoppingCartIcon className="h-5 w-5 text-black" />
+          </div>
         </div>
-      </div>
-      <div className="truncate text-sm font-medium">{product.name}</div>
-      <div className="font-bold text-lg">${product.price}</div>
-      <div className="text-xs text-gray-600">or 4 payments of $22.50</div>
-      
-    </a>
-  );
+        <div className="truncate text-sm font-medium">{product.name}</div>
+        <div className="flex items-center gap-2">
+          <div className="flex items-center">
+            {Array.from({length: 5}).map((_, i) => (
+              <Star
+                key={i}
+                className={`h-4 w-4 ${
+                  i < Math.floor(product.rating)
+                    ? "fill-yellow-400 text-yellow-400"
+                    : "text-gray-300"
+                }`}
+              />
+            ))}
+          </div>
+          <span className="text-sm font-medium">{product.rating}</span>
+          <span className="text-sm text-muted-foreground">
+            ({product.reviews})
+          </span>
+        </div>
+
+        <div className="font-bold text-lg">${product.price}</div>
+        <div className="text-xs text-gray-600">or 4 payments of ${(product.price / 4).toFixed(2)}</div>
+      </a>
+    );
+  };
 
   return (
     <div className="space-y-6 mt-8 mx-auto" style={{width: "90%"}}>
