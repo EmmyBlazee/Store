@@ -214,8 +214,8 @@ export function ProductCatalog() {
       </div>
       <div className="truncate text-sm font-medium">{product.name}</div>
       <div className="font-bold text-lg">${product.price}</div>
-      <div className="text-xs text-gray-600">Free shipping</div>
-      <div className="text-xs text-red-600">Extra 2% off with coins</div>
+      <div className="text-xs text-gray-600">or 4 payments of $22.50</div>
+      
     </a>
   );
 

@@ -40,10 +40,14 @@ interface ProductDetailProps {
 
 export function ProductDetail({ product }: ProductDetailProps) {
   const [selectedVariant, setSelectedVariant] = useState(0)
+  const [quantity, setQuantity] = useState(1)
 
   // For simplicity, variants can be derived or passed in product data; here we use a placeholder empty array
   // Removed variants usage as it is not defined in Product type
   // const variants = product.variants || []
+
+  const incrementQuantity = () => setQuantity((q) => q + 1)
+  const decrementQuantity = () => setQuantity((q) => (q > 1 ? q - 1 : 1))
 
   return (
     <>
@@ -80,7 +84,7 @@ export function ProductDetail({ product }: ProductDetailProps) {
             {product.originalPrice && product.originalPrice > product.price && (
               <p className="text-sm text-gray-500 line-through">${product.originalPrice.toFixed(2)}</p>
             )}
-            <p className="text-xs text-gray-400">Tax excluded, add at checkout if applicable</p>
+            <p className="text-xs text-gray-400">or 4 payments of $22.50</p>
           </div>
 
           {/* Additional Info */}
@@ -114,6 +118,29 @@ export function ProductDetail({ product }: ProductDetailProps) {
               <strong>Brand:</strong> {product.brand}
             </div>
           )}
+
+          {/* Quantity Selector */}
+          <div className="flex items-center gap-4 mt-4">
+            <span className="font-semibold">Quantity</span>
+            <div className="flex items-center border border-gray-300 rounded">
+              <button
+                onClick={decrementQuantity}
+                disabled={quantity === 1}
+                className="px-3 py-1 text-lg font-bold disabled:opacity-50"
+                aria-label="Decrease quantity"
+              >
+                −
+              </button>
+              <span className="px-4 py-1 text-lg font-semibold">{quantity}</span>
+              <button
+                onClick={incrementQuantity}
+                className="px-3 py-1 text-lg font-bold"
+                aria-label="Increase quantity"
+              >
+                +
+              </button>
+            </div>
+          </div>
 
           {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 mt-4">
