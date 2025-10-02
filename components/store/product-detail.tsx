@@ -42,9 +42,6 @@ export function ProductDetail({ product }: ProductDetailProps) {
   const [selectedVariant, setSelectedVariant] = useState(0)
   const [quantity, setQuantity] = useState(1)
 
-  // For simplicity, variants can be derived or passed in product data; here we use a placeholder empty array
-  // Removed variants usage as it is not defined in Product type
-  // const variants = product.variants || []
 
   const incrementQuantity = () => setQuantity((q) => q + 1)
   const decrementQuantity = () => setQuantity((q) => (q > 1 ? q - 1 : 1))
@@ -66,15 +63,22 @@ export function ProductDetail({ product }: ProductDetailProps) {
           {/* Title and Rating */}
           <div>
             <h1 className="text-2xl font-bold">{product.name}</h1>
-            <div className="flex items-center gap-2 mt-1">
-              <div className="flex text-yellow-400">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} size={16} />
-                ))}
-              </div>
-              <span className="text-sm font-semibold">{product.rating?.toFixed(1) || "N/A"}</span>
-              <span className="text-sm text-gray-600">{product.reviews} Reviews</span>
-              <span className="text-sm text-gray-600">| {product.students || 0}+ sold</span>
+            <div className="flex items-center gap-2">
+              {Array.from({length: 5}).map((_, i) => (
+                <Star
+                  key={i}
+                  className={`h-4 w-4 ${
+                    i < Math.floor(product.rating ?? 0)
+                      ? "fill-yellow-400 text-yellow-400"
+                      : "text-gray-300"
+                  }`}
+                />
+              ))}
+            </div>
+            <div className="flex gap-2 text-sm">
+              <span className="font-semibold">{product.rating?.toFixed(1) || "N/A"}</span>
+              <span className="text-gray-600">{product.reviews ?? 0} Reviews</span>
+              <span className="text-gray-600">| {product.students || 0}+ sold</span>
             </div>
           </div>
 
@@ -93,7 +97,7 @@ export function ProductDetail({ product }: ProductDetailProps) {
               <strong>Category:</strong> {product.category}
             </div>
           )}
-           {product.description&& (
+          {product.description && (
             <div>
               <strong>Description:</strong> {product.description}
             </div>

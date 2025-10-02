@@ -192,12 +192,12 @@ export function ProductCatalog() {
     const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
 
     return (
-      <a href={`/store/${product.id}`} className="relative flex flex-col gap-2 p-2 shadow-sm hover:shadow-md transition-shadow">
+      <a href={`/store/${product.id}`} className="relative flex flex-col gap-2 p-2 border border-transparent hover:border-gray-300 transition-shadow hover:shadow-md">
         <div className="relative">
           <img
             src={product.image || "/placeholder.svg"}
             alt={product.name}
-            className="w-full h-48 object-cover"
+            className="w-full max-h-48 h-auto object-cover"
           />
           <div
             role="button"
@@ -218,8 +218,8 @@ export function ProductCatalog() {
           </div>
         </div>
         <div className="truncate text-sm font-medium">{product.name}</div>
-        <div className="flex items-center gap-2">
-          <div className="flex items-center">
+        <div className="flex flex-col gap-1">
+          <div className="flex items-center gap-2">
             {Array.from({length: 5}).map((_, i) => (
               <Star
                 key={i}
@@ -231,10 +231,10 @@ export function ProductCatalog() {
               />
             ))}
           </div>
-          <span className="text-sm font-medium">{product.rating}</span>
-          <span className="text-sm text-muted-foreground">
-            ({product.reviews})
-          </span>
+          <div className="flex gap-2 text-sm">
+            <span className="font-medium">{product.rating}</span>
+            <span className="text-muted-foreground">({product.reviews})</span>
+          </div>
         </div>
 
         <div className="font-bold text-lg">${product.price}</div>
