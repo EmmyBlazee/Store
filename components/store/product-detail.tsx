@@ -89,6 +89,11 @@ export function ProductDetail({ product }: ProductDetailProps) {
               <strong>Category:</strong> {product.category}
             </div>
           )}
+           {product.description&& (
+            <div>
+              <strong>Description:</strong> {product.description}
+            </div>
+          )}
           {product.instructor && (
             <div>
               <strong>Instructor:</strong> {product.instructor}
