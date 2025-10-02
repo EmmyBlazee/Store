@@ -1,0 +1,4 @@
+- [x] Update card headers to stack vertically on mobile
+- [x] Adjust item layouts for mobile stacking
+- [x] Add responsive padding and margins
+- [x] Test mobile responsiveness
