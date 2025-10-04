@@ -152,12 +152,10 @@ export function OrderManagement() {
       </div>
 
       <Tabs defaultValue="all-orders" className="space-y-6">
-        <TabsList className="overflow-x-auto whitespace-nowrap no-scrollbar">
-          <TabsTrigger value="all-orders" className="shrink-0 min-w-[120px]">All Orders</TabsTrigger>
-          <TabsTrigger value="digital" className="shrink-0 min-w-[120px]">Digital Products</TabsTrigger>
-          <TabsTrigger value="physical" className="shrink-0 min-w-[120px]">Physical Products</TabsTrigger>
-          <TabsTrigger value="bnpl" className="shrink-0 min-w-[120px]">BNPL Orders</TabsTrigger>
-        </TabsList>
+      <TabsList className="overflow-x-auto whitespace-nowrap no-scrollbar">
+        <TabsTrigger value="all-orders" className="shrink-0 min-w-[150px]">All Orders</TabsTrigger>
+        <TabsTrigger value="bnpl" className="shrink-0 min-w-[150px] sm:min-w-[150px]">BNPL Orders</TabsTrigger>
+      </TabsList>
 
         <TabsContent value="all-orders" className="space-y-4">
           {filteredOrders.map((order) => (
@@ -334,28 +332,28 @@ export function OrderManagement() {
                     <CardDescription>Manage your payment schedule</CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    <div className="grid gap-4 md:grid-cols-2">
-                      <div className="space-y-2">
-                        <p className="text-sm text-muted-foreground">Payment Method</p>
-                        <p className="font-medium">{order.paymentMethod}</p>
-                      </div>
-                      <div className="space-y-2">
-                        <p className="text-sm text-muted-foreground">Next Payment</p>
-                        <p className="font-medium">{order.nextPayment}</p>
-                      </div>
-                      <div className="space-y-2">
-                        <p className="text-sm text-muted-foreground">Remaining Payments</p>
-                        <p className="font-medium">{order.remainingPayments}</p>
-                      </div>
-                      <div className="space-y-2">
-                        <p className="text-sm text-muted-foreground">Payment Amount</p>
-                        <p className="font-medium">${(order.total / 4).toFixed(2)}</p>
-                      </div>
+                  <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
+                    <div className="space-y-2">
+                      <p className="text-sm text-muted-foreground">Payment Method</p>
+                      <p className="font-medium">{order.paymentMethod}</p>
                     </div>
-                    <div className="flex gap-2">
-                      <Button variant="outline">View Payment Schedule</Button>
-                      <Button variant="outline">Update Payment Method</Button>
+                    <div className="space-y-2">
+                      <p className="text-sm text-muted-foreground">Next Payment</p>
+                      <p className="font-medium">{order.nextPayment}</p>
                     </div>
+                    <div className="space-y-2">
+                      <p className="text-sm text-muted-foreground">Remaining Payments</p>
+                      <p className="font-medium">{order.remainingPayments}</p>
+                    </div>
+                    <div className="space-y-2">
+                      <p className="text-sm text-muted-foreground">Payment Amount</p>
+                      <p className="font-medium">${(order.total / 4).toFixed(2)}</p>
+                    </div>
+                  </div>
+                  <div className="flex flex-col gap-2 sm:flex-row">
+                    <Button variant="outline" className="w-full sm:w-auto">View Payment Schedule</Button>
+                    <Button variant="outline" className="w-full sm:w-auto">Update Payment Method</Button>
+                  </div>
                   </CardContent>
                 </Card>
               ))}

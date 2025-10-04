@@ -7,61 +7,15 @@ import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
 import { Plus, Minus, Trash2, Tag, CreditCard, Calendar, Shield, Truck, Gift, ShoppingCartIcon } from "lucide-react"
+import { useCart } from "@/providers/CartProvider"
 
 export function ShoppingCartComponent() {
-  const [cartItems, setCartItems] = useState([
-    {
-      id: 1,
-      name: "Complete React Development Course",
-      price: 89.99,
-      originalPrice: 129.99,
-      quantity: 1,
-      type: "digital",
-      image: "/placeholder.svg?height=80&width=120",
-      instructor: "Sarah Chen",
-      bnplAvailable: true,
-    },
-    {
-      id: 2,
-      name: "Python Programming Textbook",
-      price: 45.99,
-      originalPrice: 59.99,
-      quantity: 1,
-      type: "physical",
-      image: "/placeholder.svg?height=80&width=120",
-      author: "Dr. Michael Johnson",
-      bnplAvailable: true,
-    },
-    {
-      id: 4,
-      name: "Programming Laptop - Student Edition",
-      price: 899.99,
-      originalPrice: 1199.99,
-      quantity: 1,
-      type: "physical",
-      image: "/placeholder.svg?height=80&width=120",
-      brand: "TechPro",
-      bnplAvailable: true,
-    },
-  ])
-
+  const { cartItems, updateQuantity, removeFromCart, setCartItems } = useCart()
   const [promoCode, setPromoCode] = useState("")
   const [appliedPromo, setAppliedPromo] = useState<{
     code: string
     discount: number
   } | null>(null)
-
-  const updateQuantity = (id: number, newQuantity: number) => {
-    if (newQuantity === 0) {
-      setCartItems(cartItems.filter((item) => item.id !== id))
-    } else {
-      setCartItems(cartItems.map((item) => (item.id === id ? { ...item, quantity: newQuantity } : item)))
-    }
-  }
-
-  const removeItem = (id: number) => {
-    setCartItems(cartItems.filter((item) => item.id !== id))
-  }
 
   const applyPromoCode = () => {
     // Simulate promo code validation
@@ -81,7 +35,7 @@ export function ShoppingCartComponent() {
   }
 
   const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0)
-  const savings = cartItems.reduce((sum, item) => sum + (item.originalPrice - item.price) * item.quantity, 0)
+  const savings = cartItems.reduce((sum, item) => sum + ((item.originalPrice ?? item.price) - item.price) * item.quantity, 0)
   const promoDiscount = appliedPromo ? (subtotal * appliedPromo.discount) / 100 : 0
   const shipping = cartItems.some((item) => item.type === "physical") ? 9.99 : 0
   const tax = (subtotal - promoDiscount) * 0.08 // 8% tax
@@ -157,7 +111,7 @@ export function ShoppingCartComponent() {
                   <div className="text-center sm:text-right space-y-2">
                     <div className="space-y-1">
                       <p className="font-semibold">${item.price}</p>
-                      {item.originalPrice > item.price && (
+                      {(item.originalPrice ?? 0) > item.price && (
                         <p className="text-sm text-muted-foreground line-through">${item.originalPrice}</p>
                       )}
                     </div>
@@ -184,7 +138,7 @@ export function ShoppingCartComponent() {
                       variant="ghost"
                       size="sm"
                       className="text-red-600 hover:text-red-700"
-                      onClick={() => removeItem(item.id)}
+                      onClick={() => removeFromCart(item.id)}
                     >
                       <Trash2 className="h-4 w-4" />
                     </Button>

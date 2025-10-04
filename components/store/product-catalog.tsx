@@ -1,6 +1,7 @@
 "use client";
 
 import {useState} from "react";
+import Link from "next/link";
 import {
   Card,
   CardContent,
@@ -19,6 +20,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import {Tabs, TabsList, TabsTrigger} from "@/components/ui/tabs";
+import { toast } from "sonner";
 import {
   Search,
   Filter,
@@ -36,8 +38,43 @@ import {
 
 
 
-export function ProductCatalog() {
-  
+interface Product {
+  id: number
+  name: string
+  description?: string
+  price: number
+  originalPrice?: number
+  category?: string
+  type?: string
+  rating?: number
+  reviews?: number
+  image?: string
+  instructor?: string
+  duration?: string
+  students?: number
+  bestseller?: boolean
+  bnplAvailable?: boolean
+  author?: string
+  brand?: string
+  pages?: number
+  publisher?: string
+  specs?: string
+  warranty?: string
+  inStock?: boolean
+  narrator?: string
+  episodes?: number
+  includes?: string
+  value?: string
+  format?: string
+  jobGuarantee?: boolean
+}
+
+interface ProductCatalogProps {
+  onAddToCart: (product: Product) => void
+}
+
+export function ProductCatalog({ onAddToCart }: ProductCatalogProps) {
+
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [sortBy, setSortBy] = useState("popular");
@@ -174,11 +211,11 @@ export function ProductCatalog() {
       case "price-high":
         return b.price - a.price;
       case "rating":
-        return b.rating - a.rating;
+        return (b.rating ?? 0) - (a.rating ?? 0);
       case "newest":
         return b.id - a.id;
       default:
-        return b.reviews - a.reviews;
+        return (b.reviews ?? 0) - (a.reviews ?? 0);
     }
   });
 
@@ -186,60 +223,59 @@ export function ProductCatalog() {
     return Math.round(((original - current) / original) * 100);
   };
 
-  const ProductCard = ({product}: {product: any}) => {
+  const ProductCard = ({product}: {product: Product}) => {
     const fullStars = Math.floor(product.rating || 0);
     const halfStar = (product.rating || 0) - fullStars >= 0.5;
     const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
 
     return (
-      <a href={`/store/${product.id}`} className="relative flex flex-col gap-2 p-2 border border-transparent hover:border-gray-300 transition-shadow hover:shadow-md">
-        <div className="relative">
-          <img
-            src={product.image || "/placeholder.svg"}
-            alt={product.name}
-            className="w-full max-h-48 h-auto object-cover"
-          />
-          <div
-            role="button"
-            tabIndex={0}
-            className="absolute bottom-2 right-2 bg-white rounded-full p-2 shadow-md hover:bg-gray-100 cursor-pointer"
-            onClick={(e) => {
-              e.preventDefault();
-              // Add to cart logic here if needed
-            }}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
+      <Link href={`/store/${product.id}`} className="block">
+        <div className="relative flex flex-col gap-2 p-2 border border-transparent hover:border-gray-300 transition-shadow hover:shadow-md">
+          <div className="relative">
+            <img
+              src={product.image || "/placeholder.svg"}
+              alt={product.name}
+              className="w-full max-h-48 h-auto object-cover"
+            />
+            <div
+              role="button"
+              tabIndex={0}
+              className="absolute bottom-2 right-2 bg-white rounded-full p-2 shadow-md hover:bg-gray-100 cursor-pointer"
+              onClick={(e) => {
                 e.preventDefault();
-                // Add to cart logic here if needed
-              }
-            }}
-          >
-            <ShoppingCartIcon className="h-5 w-5 text-black" />
-          </div>
-        </div>
-        <div className="truncate text-sm font-medium">{product.name}</div>
-        <div className="flex flex-col gap-1">
-          <div className="flex items-center gap-2">
-            {Array.from({length: 5}).map((_, i) => (
-              <Star
-                key={i}
-                className={`h-4 w-4 ${
-                  i < Math.floor(product.rating)
-                    ? "fill-yellow-400 text-yellow-400"
-                    : "text-gray-300"
-                }`}
-              />
-            ))}
-          </div>
-          <div className="flex gap-2 text-sm">
-            <span className="font-medium">{product.rating}</span>
-            <span className="text-muted-foreground">({product.reviews})</span>
-          </div>
-        </div>
+                onAddToCart(product);
+                toast.success(`${product.name} has been added to your cart.`);
+              }}
 
-        <div className="font-bold text-lg">${product.price}</div>
-        <div className="text-xs text-gray-600">or 4 payments of ${(product.price / 4).toFixed(2)}</div>
-      </a>
+
+            >
+              <ShoppingCartIcon className="h-5 w-5 text-black" />
+            </div>
+          </div>
+          <div className="truncate text-sm font-medium">{product.name}</div>
+          <div className="flex flex-col gap-1">
+            <div className="flex items-center gap-2">
+              {Array.from({length: 5}).map((_, i) => (
+                <Star
+                  key={i}
+                  className={`h-4 w-4 ${
+                    i < Math.floor(product.rating ?? 0)
+                      ? "fill-yellow-400 text-yellow-400"
+                      : "text-gray-300"
+                  }`}
+                />
+              ))}
+            </div>
+            <div className="flex gap-2 text-sm">
+              <span className="font-medium">{product.rating}</span>
+              <span className="text-muted-foreground">({product.reviews})</span>
+            </div>
+          </div>
+
+          <div className="font-bold text-lg">${product.price}</div>
+          <div className="text-xs text-gray-600">or 4 payments of ${(product.price / 4).toFixed(2)}</div>
+        </div>
+      </Link>
     );
   };
 

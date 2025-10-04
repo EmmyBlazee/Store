@@ -2,6 +2,8 @@
 
 import React, { useState } from "react"
 import { Star } from "lucide-react"
+import { useCart } from "@/providers/CartProvider"
+import { toast } from "sonner"
 
 interface Product {
   id: number
@@ -41,10 +43,24 @@ interface ProductDetailProps {
 export function ProductDetail({ product }: ProductDetailProps) {
   const [selectedVariant, setSelectedVariant] = useState(0)
   const [quantity, setQuantity] = useState(1)
-
+  const { addToCart } = useCart()
 
   const incrementQuantity = () => setQuantity((q) => q + 1)
   const decrementQuantity = () => setQuantity((q) => (q > 1 ? q - 1 : 1))
+
+  const handleAddToCart = () => {
+    for (let i = 0; i < quantity; i++) {
+      addToCart(product)
+    }
+    toast.success(`${quantity} ${product.name}${quantity > 1 ? 's' : ''} added to cart!`)
+  }
+
+  const handleBuyNow = () => {
+    // For now, just add to cart and show a message
+    // In a real app, this would redirect to checkout
+    handleAddToCart()
+    toast.success("Proceeding to checkout...")
+  }
 
   return (
     <>
@@ -78,7 +94,7 @@ export function ProductDetail({ product }: ProductDetailProps) {
             <div className="flex gap-2 text-sm">
               <span className="font-semibold">{product.rating?.toFixed(1) || "N/A"}</span>
               <span className="text-gray-600">{product.reviews ?? 0} Reviews</span>
-              <span className="text-gray-600">| {product.students || 0}+ sold</span>
+
             </div>
           </div>
 
@@ -88,7 +104,7 @@ export function ProductDetail({ product }: ProductDetailProps) {
             {product.originalPrice && product.originalPrice > product.price && (
               <p className="text-sm text-gray-500 line-through">${product.originalPrice.toFixed(2)}</p>
             )}
-            <p className="text-xs text-gray-400">or 4 payments of $22.50</p>
+            <p className="text-xs text-gray-400">or 4 payments of ${(product.price / 4).toFixed(2)}</p>
           </div>
 
           {/* Additional Info */}
@@ -148,10 +164,16 @@ export function ProductDetail({ product }: ProductDetailProps) {
 
           {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 mt-4">
-            <button className="bg-red-600 text-white py-3 px-6 rounded font-semibold hover:bg-red-700 transition">
+            <button
+              onClick={handleBuyNow}
+              className="bg-red-600 text-white py-3 px-6 rounded font-semibold hover:bg-red-700 transition"
+            >
               Buy now
             </button>
-            <button className="border border-gray-700 py-3 px-6 rounded font-semibold hover:bg-gray-100 transition">
+            <button
+              onClick={handleAddToCart}
+              className="border border-gray-700 py-3 px-6 rounded font-semibold hover:bg-gray-100 transition"
+            >
               Add to cart
             </button>
           </div>
