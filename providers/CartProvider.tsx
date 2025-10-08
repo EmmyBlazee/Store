@@ -43,6 +43,8 @@ interface CartContextType {
   clearCart: () => void;
   getTotalItems: () => number;
   getTotalPrice: () => number;
+  buyNowProduct: Product | null;
+  setBuyNowProduct: (product: Product | null) => void;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -61,6 +63,7 @@ interface CartProviderProps {
 
 export function CartProvider({ children }: CartProviderProps) {
   const [cartItems, setCartItems] = useState<Product[]>([]);
+  const [buyNowProduct, setBuyNowProduct] = useState<Product | null>(null);
 
   const addToCart = (product: Omit<Product, 'quantity'>) => {
     setCartItems((prevItems) => {
@@ -112,6 +115,8 @@ export function CartProvider({ children }: CartProviderProps) {
     clearCart,
     getTotalItems,
     getTotalPrice,
+    buyNowProduct,
+    setBuyNowProduct,
   };
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

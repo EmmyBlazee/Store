@@ -1,7 +1,7 @@
 "use client";
 
 import {useState} from "react";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   Card,
   CardContent,
@@ -75,6 +75,7 @@ interface ProductCatalogProps {
 
 export function ProductCatalog({ onAddToCart }: ProductCatalogProps) {
 
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [sortBy, setSortBy] = useState("popular");
@@ -223,13 +224,13 @@ export function ProductCatalog({ onAddToCart }: ProductCatalogProps) {
     return Math.round(((original - current) / original) * 100);
   };
 
-  const ProductCard = ({product}: {product: Product}) => {
+  const ProductCard = ({ product, onAddToCart }: { product: Product; onAddToCart: (product: Product) => void }) => {
     const fullStars = Math.floor(product.rating || 0);
     const halfStar = (product.rating || 0) - fullStars >= 0.5;
     const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
 
     return (
-      <Link href={`/store/${product.id}`} className="block">
+      <div onClick={() => router.push(`/store/${product.id}`)} className="block cursor-pointer">
         <div className="relative flex flex-col gap-2 p-2 border border-transparent hover:border-gray-300 transition-shadow hover:shadow-md">
           <div className="relative">
             <img
@@ -237,20 +238,17 @@ export function ProductCatalog({ onAddToCart }: ProductCatalogProps) {
               alt={product.name}
               className="w-full max-h-48 h-auto object-cover"
             />
-            <div
-              role="button"
-              tabIndex={0}
-              className="absolute bottom-2 right-2 bg-white rounded-full p-2 shadow-md hover:bg-gray-100 cursor-pointer"
+            <button
+              type="button"
+              className="absolute bottom-2 right-2 bg-white rounded-full p-2 shadow-md hover:bg-gray-100 cursor-pointer border-none"
               onClick={(e) => {
-                e.preventDefault();
+                e.stopPropagation();
                 onAddToCart(product);
                 toast.success(`${product.name} has been added to your cart.`);
               }}
-
-
             >
               <ShoppingCartIcon className="h-5 w-5 text-black" />
-            </div>
+            </button>
           </div>
           <div className="truncate text-sm font-medium">{product.name}</div>
           <div className="flex flex-col gap-1">
@@ -275,7 +273,7 @@ export function ProductCatalog({ onAddToCart }: ProductCatalogProps) {
           <div className="font-bold text-lg">${product.price}</div>
           <div className="text-xs text-gray-600">or 4 payments of ${(product.price / 4).toFixed(2)}</div>
         </div>
-      </Link>
+      </div>
     );
   };
 
@@ -339,7 +337,7 @@ export function ProductCatalog({ onAddToCart }: ProductCatalogProps) {
           {/* Products Grid */}
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
             {sortedProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
+              <ProductCard key={product.id} product={product} onAddToCart={onAddToCart} />
             ))}
           </div>
 

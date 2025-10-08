@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -10,7 +11,8 @@ import { Plus, Minus, Trash2, Tag, CreditCard, Calendar, Shield, Truck, Gift, Sh
 import { useCart } from "@/providers/CartProvider"
 
 export function ShoppingCartComponent() {
-  const { cartItems, updateQuantity, removeFromCart, setCartItems } = useCart()
+  const router = useRouter()
+  const { cartItems, updateQuantity, removeFromCart, setCartItems, setBuyNowProduct } = useCart()
   const [promoCode, setPromoCode] = useState("")
   const [appliedPromo, setAppliedPromo] = useState<{
     code: string
@@ -200,12 +202,18 @@ export function ShoppingCartComponent() {
                     <span>-${promoDiscount.toFixed(2)}</span>
                   </div>
                 )}
-                {shipping > 0 && (
-                  <div className="flex justify-between">
-                    <span>Shipping</span>
-                    <span>${shipping.toFixed(2)}</span>
-                  </div>
-                )}
+                <div className="flex justify-between">
+                  <span>Shipping</span>
+                  <span>
+                    {shipping === 0 ? (
+                      <Badge variant="secondary" className="text-xs">
+                        FREE
+                      </Badge>
+                    ) : (
+                      `$${shipping.toFixed(2)}`
+                    )}
+                  </span>
+                </div>
                 <div className="flex justify-between">
                   <span>Tax</span>
                   <span>${tax.toFixed(2)}</span>
@@ -218,7 +226,7 @@ export function ShoppingCartComponent() {
               </div>
 
               <div className="space-y-2">
-                <Button className="w-full" size="lg">
+                <Button className="w-full" size="lg" onClick={() => { setBuyNowProduct(null); router.push('/store/checkout') }}>
                   <CreditCard className="mr-2 h-4 w-4" />
                   Proceed to Checkout
                 </Button>
@@ -267,7 +275,7 @@ export function ShoppingCartComponent() {
                 </div>
                 <div className="flex items-center gap-2">
                   <Truck className="h-4 w-4 text-blue-600" />
-                  <span>Free shipping on orders over $50</span>
+                  <span>Shipping $9.99 for physical items</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Gift className="h-4 w-4 text-purple-600" />

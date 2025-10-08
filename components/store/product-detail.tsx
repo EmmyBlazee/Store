@@ -1,6 +1,7 @@
 "use client"
 
 import React, { useState } from "react"
+import { useRouter } from "next/navigation"
 import { Star } from "lucide-react"
 import { useCart } from "@/providers/CartProvider"
 import { toast } from "sonner"
@@ -41,9 +42,10 @@ interface ProductDetailProps {
 }
 
 export function ProductDetail({ product }: ProductDetailProps) {
+  const router = useRouter()
   const [selectedVariant, setSelectedVariant] = useState(0)
   const [quantity, setQuantity] = useState(1)
-  const { addToCart } = useCart()
+  const { addToCart, setCartItems, setBuyNowProduct } = useCart()
 
   const incrementQuantity = () => setQuantity((q) => q + 1)
   const decrementQuantity = () => setQuantity((q) => (q > 1 ? q - 1 : 1))
@@ -56,10 +58,8 @@ export function ProductDetail({ product }: ProductDetailProps) {
   }
 
   const handleBuyNow = () => {
-    // For now, just add to cart and show a message
-    // In a real app, this would redirect to checkout
-    handleAddToCart()
-    toast.success("Proceeding to checkout...")
+    setBuyNowProduct({ ...product, quantity })
+    router.push('/store/checkout')
   }
 
   return (
