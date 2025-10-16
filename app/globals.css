@@ -22,6 +22,15 @@
       transform: scale(1);
     }
   }
+  --animate-counter: counter 2s ease-out forwards;
+  @keyframes counter {
+    from {
+      content: "0";
+    }
+    to {
+      content: attr(data-target);
+    }
+  }
 }
 
 @layer base {
@@ -111,6 +120,13 @@
   }
   .inputs {
     @apply !bg-gray-100 focus-visible:!ring-0 focus-visible:!ring-offset-0 !rounded-3xl;
+  }
+  .counter {
+    counter-reset: count var(--num);
+    animation: counter 2s ease-out forwards;
+  }
+  .counter::before {
+    content: counter(count);
   }
 }
 
