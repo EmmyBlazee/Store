@@ -19,7 +19,7 @@ export function HeroSection() {
             <Link href="/programs">
               <Button
                 size="lg"
-                className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-8 py-6 text-base rounded-full">
+                className="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-8 py-6 text-base rounded-full">
                 SEE HOW WE WORK →
               </Button>
             </Link>
