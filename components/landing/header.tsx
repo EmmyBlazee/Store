@@ -8,20 +8,7 @@ import {useState, useEffect} from "react";
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isBouncing, setIsBouncing] = useState(true);
   const router = useRouter();
-
-  useEffect(() => {
-    // Stop button bounce after 5 seconds
-    const bounceTimer = setTimeout(() => {
-      setIsBouncing(false);
-    }, 5000);
-
-    // Cleanup timer on component unmount
-    return () => {
-      clearTimeout(bounceTimer);
-    };
-  }, []);
 
   return (
     <header className="fixed top-0 left-0 right-0 z-[1000] bg-background px-6 py-6 lg:px-12">
@@ -78,7 +65,7 @@ export function Header() {
           <Button
             asChild
             size="sm"
-            className={`hidden md:flex bg-orange-500 hover:bg-orange-600 text-white font-semibold px-6 py-2 rounded-full transition-colors ${isBouncing ? "animate-bounce" : ""}`}>
+            className="hidden md:flex bg-orange-500 hover:bg-orange-600 text-white font-semibold px-6 py-2 rounded-full transition-colors animate-bounce">
             <Link href="/login">
               Continue →
             </Link>
