@@ -34,28 +34,28 @@ export function Header() {
             <li>
               <Link
                 href="/"
-                className="text-sm font-medium text-foreground hover:text-primary transition-colors">
+                className="text-sm font-medium text-foreground hover:text-primary transition-colors px-4 py-2  hover:bg-orange-100 rounded-md">
                 Home
               </Link>
             </li>
             <li>
               <Link
                 href="/about"
-                className="text-sm font-medium text-foreground hover:text-primary transition-colors">
+                className="text-sm font-medium text-foreground hover:text-primary transition-colors px-4 py-2  hover:bg-orange-100 rounded-md">
                 About
               </Link>
             </li>
             <li>
               <Link
                 href="/contact"
-                className="text-sm font-medium text-foreground hover:text-primary transition-colors">
+                className="text-sm font-medium text-foreground hover:text-primary transition-colors px-4 py-2  hover:bg-orange-100 rounded-md">
                 Contact
               </Link>
             </li>
             <li>
               <Link
                 href="/team"
-                className="text-sm font-medium text-foreground hover:text-primary transition-colors">
+                className="text-sm font-medium text-foreground hover:text-primary transition-colors px-4 py-2  hover:bg-orange-100 rounded-md">
                 The Team
               </Link>
             </li>
@@ -91,7 +91,7 @@ export function Header() {
                   setIsMenuOpen(false);
                   router.push('/');
                 }}
-                className="text-sm font-black text-white bg-orange-500 hover:bg-orange-600 transition-colors block drop-shadow-sm text-left w-full rounded py-3">
+                className="text-sm font-black text-white hover:text-orange-400 transition-colors block drop-shadow-sm text-left w-full rounded py-3">
                 Home
               </button>
             </li>
@@ -101,7 +101,7 @@ export function Header() {
                   setIsMenuOpen(false);
                   router.push('/about');
                 }}
-                className="text-sm font-black text-white bg-orange-500 hover:bg-orange-600 transition-colors block drop-shadow-sm text-left w-full rounded py-3">
+                className="text-sm font-black text-white hover:text-orange-400 transition-colors block drop-shadow-sm text-left w-full rounded py-3">
                 About
               </button>
             </li>
@@ -111,7 +111,7 @@ export function Header() {
                   setIsMenuOpen(false);
                   router.push('/contact');
                 }}
-                className="text-sm font-black text-white bg-orange-500 hover:bg-orange-600 transition-colors block drop-shadow-sm text-left w-full rounded py-3">
+                className="text-sm font-black text-white hover:text-orange-400 transition-colors block drop-shadow-sm text-left w-full rounded py-3">
                 Contact
               </button>
             </li>
@@ -121,7 +121,7 @@ export function Header() {
                   setIsMenuOpen(false);
                   router.push('/team');
                 }}
-                className="text-sm font-black text-white bg-orange-500 hover:bg-orange-600 transition-colors block drop-shadow-sm text-left w-full rounded py-3">
+                className="text-sm font-black text-white hover:text-orange-400 transition-colors block drop-shadow-sm text-left w-full rounded py-3">
                 The Team
               </button>
             </li>
