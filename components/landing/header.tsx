@@ -4,11 +4,24 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {Button} from "@/components/ui/button";
 import {Hexagon, Menu, X} from "lucide-react";
-import {useState} from "react";
+import {useState, useEffect} from "react";
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isBouncing, setIsBouncing] = useState(true);
   const router = useRouter();
+
+  useEffect(() => {
+    // Stop button bounce after 5 seconds
+    const bounceTimer = setTimeout(() => {
+      setIsBouncing(false);
+    }, 5000);
+
+    // Cleanup timer on component unmount
+    return () => {
+      clearTimeout(bounceTimer);
+    };
+  }, []);
 
   return (
     <header className="fixed top-0 left-0 right-0 z-[1000] bg-background px-6 py-6 lg:px-12">
@@ -65,7 +78,7 @@ export function Header() {
           <Button
             asChild
             size="sm"
-            className="hidden md:flex bg-orange-500 hover:bg-orange-600 text-white font-semibold px-6 py-2 rounded-full transition-colors">
+            className={`hidden md:flex bg-orange-500 hover:bg-orange-600 text-white font-semibold px-6 py-2 rounded-full transition-colors ${isBouncing ? "animate-bounce" : ""}`}>
             <Link href="/login">
               Continue →
             </Link>
@@ -91,7 +104,7 @@ export function Header() {
                   setIsMenuOpen(false);
                   router.push('/');
                 }}
-                className="text-sm font-black text-white  hover:bg-orange-600 transition-colors block drop-shadow-sm text-left w-full rounded py-3">
+                className="text-sm font-black text-white bg-orange-500 hover:bg-orange-600 transition-colors block drop-shadow-sm text-left w-full rounded py-3">
                 Home
               </button>
             </li>
@@ -101,7 +114,7 @@ export function Header() {
                   setIsMenuOpen(false);
                   router.push('/about');
                 }}
-                className="text-sm font-black text-white  hover:bg-orange-600 transition-colors block drop-shadow-sm text-left w-full rounded py-3">
+                className="text-sm font-black text-white bg-orange-500 hover:bg-orange-600 transition-colors block drop-shadow-sm text-left w-full rounded py-3">
                 About
               </button>
             </li>
@@ -111,7 +124,7 @@ export function Header() {
                   setIsMenuOpen(false);
                   router.push('/contact');
                 }}
-                className="text-sm font-black text-white  hover:bg-orange-600 transition-colors block drop-shadow-sm text-left w-full rounded py-3">
+                className="text-sm font-black text-white bg-orange-500 hover:bg-orange-600 transition-colors block drop-shadow-sm text-left w-full rounded py-3">
                 Contact
               </button>
             </li>
@@ -121,7 +134,7 @@ export function Header() {
                   setIsMenuOpen(false);
                   router.push('/team');
                 }}
-                className="text-sm font-black text-white  hover:bg-orange-600 transition-colors block drop-shadow-sm text-left w-full rounded py-3">
+                className="text-sm font-black text-white bg-orange-500 hover:bg-orange-600 transition-colors block drop-shadow-sm text-left w-full rounded py-3">
                 The Team
               </button>
             </li>
